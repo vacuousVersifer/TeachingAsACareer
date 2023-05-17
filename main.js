@@ -1,18 +1,5 @@
-const { app, BrowserWindow } = require('electron')
+const PageHandler = require("./pages/pageHandler");
+let pageHandler = new PageHandler();
 
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-  })
-
-  win.loadFile('pages/entrance/index.html')
-}
-
-app.whenReady().then(() => {
-  createWindow()
-})
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
+console.log("Welcome to my final! \nLaunching the page handler...");
+pageHandler.start();

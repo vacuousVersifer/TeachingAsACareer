@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,10 @@
   },
   "homepage": "https://github.com/vacuousVersifer/teachingasacareer#readme",
   "devDependencies": {
-    "electron": "^24.3.0"
+    "electron": "^24.3.0",
+    "eslint": "^8.40.0"
+  },
+  "dependencies": {
+    "jquery": "^3.7.0"
   }
 }
