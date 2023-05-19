@@ -15,10 +15,11 @@ class PageHandler {
     console.log("Page Handler started!");
 
     app.whenReady().then(() => {
-      this.createWindow("entrance", 400, 600);
+      this.mainWindow = this.createWindow("entrance", 400, 600);
+
       ipcMain.handle("open", (event, name) => {
         if(!this.isWindowOpened(this.windows[name])) {
-          this.windows[name] = this.createWindow(name, 800, 600);
+          this.windows[name] = this.createWindow(name, 800, 600, this.mainWindow);
         }
       });
     });
@@ -28,7 +29,7 @@ class PageHandler {
     });
   }
 
-  createWindow(name, width, height) {
+  createWindow(name, width, height, top) {
     const preloadPath = path.join(__dirname, name, "preload.js");
     const config = {
       width,
@@ -38,6 +39,9 @@ class PageHandler {
         preload: preloadPath
       }
     };
+    if(top) {
+      config.parent = top;
+    }
     const window = new BrowserWindow(config);
     window.loadFile(path.join("pages", name, "index.html"));
     window.once("ready-to-show", () => {
