@@ -4,20 +4,15 @@ const path = require("path");
 class PageHandler {
   constructor() {
     console.log("Page Handler created");
-    this.openWindows = {
-      chapter1: false,
-      chapter2: false,
-      chapter3: false,
-      chapter4: false,
-      chapter5: false,
-      chapter6: false,
-      chapter7: false,
-      chapter8: false,
-      chapter9: false,
-      chapter10: false,
-      chapter11: false,
-      chapter12: false,
-    };
+
+    this.windows = {};
+    for(let i = 1; i <= 12; i++) {
+      let template = {
+        opened: false,
+        window: null
+      };
+      this.windows[`chapter${i}`] = template;
+    }
   }
 
   start() {
@@ -26,12 +21,12 @@ class PageHandler {
     app.whenReady().then(() => {
       this.createWindow("entrance", 400, 600);
       ipcMain.handle("open", (event, name) => {
-        if(this.openWindows[name]) {
-          return console.log("Already opened", name);
+        let window = this.windows[name];
+        
+        if(window.opened || !this.isWindowOpened(window.window)) {
+          window.opened = true;
+          window.window = this.createWindow(name, 800, 600);
         }
-        console.log("Opening", name);
-        this.openWindows[name] = true;
-        this.createWindow(name, 800, 600);
       });
     });
 
@@ -45,12 +40,22 @@ class PageHandler {
     const config = {
       width,
       height,
+      show: false,
       webPreferences: {
         preload: preloadPath
       }
     };
     const window = new BrowserWindow(config);
     window.loadFile(path.join("pages", name, "index.html"));
+    window.once("ready-to-show", () => {
+      window.show();
+    });
+    return window;
+  }
+
+  isWindowOpened(window) {
+    if(window == null) return false;
+    return !window.isDestroyed();
   }
 }
 
