@@ -19,7 +19,7 @@ class PageHandler {
 
       ipcMain.handle("open", (event, name) => {
         if(!this.isWindowOpened(this.windows[name])) {
-          this.windows[name] = this.createWindow(name, 800, 600, this.mainWindow);
+          this.windows[name] = this.createWindow(name, 500, 600, this.mainWindow);
         }
       });
     });
